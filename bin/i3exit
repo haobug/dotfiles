@@ -1,0 +1,35 @@
+#!/bin/sh
+lock() {
+    i3lock --color=000000 -n -ti $HOME/Pictures/wallpaper.jpg
+    #mate-screensaver-command -a
+}
+
+case "$1" in
+    lock)
+        #lock
+        #TODO: xset dpms
+        mate-screensaver-command -a
+        ;;
+    logout)
+        i3-msg exit
+        ;;
+    suspend)
+        gksu pm-suspend
+        ;;
+    hibernate)
+        lock && dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Hibernate
+        /sbin/reboot
+        ;;
+    reboot)
+        dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
+        ;;
+    shutdown)
+        dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop
+        #/sbin/poweroff
+        ;;
+    *)
+        echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
+        exit 2
+esac
+
+exit 0
