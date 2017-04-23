@@ -1,7 +1,13 @@
 
-# Note: PS1 and umask are already set in /etc/profile. You should not
-# need this unless you want different defaults for root.
-# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
-# umask 022
+# git branch info
+if [ -f /usr/local/share/gitprompt.sh ]; then
+    GIT_PROMPT_THEME=Default
+    . /usr/local/share/gitprompt.sh
+fi
 
+if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
+    . /usr/lib/git-core/git-sh-prompt
+fi
 
+export PS1='\[\e[33;44m\]\u\[\e[m\]@\h \W$(__git_ps1 "(\[\e[1;32m\]%s\[\e[0m\])")\$ '
+#export PS1='\w \$ '
